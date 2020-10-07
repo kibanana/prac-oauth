@@ -37,7 +37,7 @@ router.get('/sign-in', (req, res) => {
         const { _id } = req.user
     
         const token = jwt.sign({ _id }, process.env.JWT_SECRET)
-        const refreshToken = jwt.sign({ _id }, process.env.REFRESH_SECRET)
+        const refreshToken = jwt.sign({ _id }, process.env.JWT_REFRESH_SECRET)
         
         refreshTokenDB.Create({ userId: _id, refreshToken })
     
