@@ -14,8 +14,8 @@ module.exports = new GoogleStrategy({
         if (await userDB.IsExists({ type: params.type, email: params.email })) await userDB.SignIn(params)
         else await userDB.SignUp(params)
 
-        const user = userDB.GetItem({ type: params.type, email: params.email })
-    
+        const user = await userDB.GetItem({ type: params.type, email: params.email })
+        
         return done(null, user)
     }
     catch (err) {

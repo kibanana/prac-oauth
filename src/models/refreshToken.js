@@ -5,13 +5,16 @@ const refreshTokenColl = connection.collection('refresh_token')
 exports.Create = (params = {}) => {
     const { userId, refreshToken } = params
 
+    const currentDate = new Date()
+
     return refreshTokenColl.updateOne({
-       userId: new ObjectId(userId),
+        userId: new ObjectId(userId),
     }, {
-       userId: new ObjectId(userId),
-       refreshToken,
-       lastUpdated: new Date(),
-       expiresAt: new Date() 
+        $set: {
+            refreshToken,
+            lastUpdated: new Date(),
+            expiresAt: new Date(currentDate.setDate(currentDate.getDate() + 10))
+        }
     }, {
         upsert: true
     })

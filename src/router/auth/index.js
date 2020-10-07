@@ -1,7 +1,7 @@
 const express = require('express')
 const passport = require('passport')
 const jwt = require('jsonwebtoken')
-const refreshTokenDB = require('../models/refreshToken')
+const refreshTokenDB = require('../../models/refreshToken')
 
 const router = express.Router()
 
@@ -17,6 +17,7 @@ router.get('/succeed', (req, res) => {
         res.send(JSON.stringify(req.user, null, 4))
     }
     catch (err) {
+        console.log(err)
         res.status(500).send('Fail!')
     }
 })
@@ -26,6 +27,7 @@ router.get('/fail', (req, res) => {
         res.status(400).send('Fail!')
     }
     catch (err) {
+        console.log(err)
         res.status(500).send('Fail!')
     }
 })
@@ -44,6 +46,7 @@ router.get('/sign-in', (req, res) => {
         res.send({ token })
     }
     catch (err) {
+        console.log(err)
         res.status(500).send('Fail!')
     }
 })
@@ -53,6 +56,7 @@ router.get('/access-verify', passport.authenticate('jwt', { failureRedirect: '/a
         res.send('Succeed!')
     }
     catch (err) {
+        console.log(err)
         res.status(500).send('Fail!')
     }
 })
@@ -68,11 +72,12 @@ router.get('/refresh-access', (req, res) => {
     
         const { _id } = decodedToken
     
-        const token = jwt.sign({ _id }, process.env.JWT_SECRET)
+        const newToken = jwt.sign({ _id }, process.env.JWT_SECRET)
     
-        res.send({ token })
+        res.send({ token: newToken })
     }
     catch (err) {
+        console.log(err)
         res.status(500).send('Fail!')
     }
 })
@@ -86,6 +91,7 @@ router.delete('/sign-out', passport.authenticate('jwt', { failureRedirect: '/aut
         res.send('Succeed!')
     }
     catch (err) {
+        console.log(err)
         res.status(500).send('Fail!')
     }
 })
