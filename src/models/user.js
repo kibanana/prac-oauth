@@ -2,6 +2,12 @@ const { connection } = require('mongoose')
 const { ObjectId } = require('mongodb')
 const userColl = connection.collection('users')
 
+exports.GetItem = (params = {}) => {
+    const { type, email } = params
+
+    return userColl.findOne({ type, email })
+}
+
 exports.IsExists = async (params = {}) => {
     const { type, email } = params
 
