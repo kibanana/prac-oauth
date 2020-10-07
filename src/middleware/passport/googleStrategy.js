@@ -9,6 +9,13 @@ module.exports = new GoogleStrategy({
     const { name: { familyName, givenName }, emails, photos } = profile
 
     const params = { type: 'google', email: emails[0].value, firstName: givenName, lastName: familyName, photo: photos[0].value }
- 
+
+    if (await userDB.IsExistsUser({ type: params.type, email: params.email })) {
+        await userDB.SignIn(params)
+    }
+    else {
+        await userDB.SignUp(params)
+    }
+
     return done(null, profile)
 })
