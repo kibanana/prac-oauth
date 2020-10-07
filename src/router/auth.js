@@ -10,7 +10,8 @@ router.get('/google/callback', passport.authenticate('google', { failureRedirect
 })
 
 router.get('/succeed', (req, res) => {
-    res.send('Succeed!')
+    if (!req.user) return res.status(401).send('Unauthorized!')
+    res.send(JSON.stringify(req.user, null, 4))
 })
 
 router.get('/fail', (req, res) => {

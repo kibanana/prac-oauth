@@ -9,9 +9,7 @@ require('./src/models/connection')
 
 const app = express()
 
-app.use(passport.initialize())
-app.use(passport.session())
-
+app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(session({
     secret: process.env.SESSION_SECRET,
@@ -23,6 +21,9 @@ app.use(session({
     }
 }))
 app.use(cookieParser())
+
+app.use(passport.initialize())
+app.use(passport.session())
 
 app.use('/', express.static('src/public'))
 
