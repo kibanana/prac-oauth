@@ -1,6 +1,8 @@
 const passport = require('passport')
+const JwtStrategy = require('./jwtStrategy')
 const GoogleStrategy = require('./googleStrategy')
 
+passport.use('jwt', JwtStrategy)
 passport.use('google', GoogleStrategy)
 
 passport.serializeUser(function(user, done) {

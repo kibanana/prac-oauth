@@ -6,16 +6,17 @@ module.exports = new GoogleStrategy({
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: 'http://localhost:3000/auth/google/callback'
 }, async (_accessToken, _refreshToken, profile, done) => {
-    const { name: { familyName, givenName }, emails, photos } = profile
+    try {
+        const { name: { familyName, givenName }, emails, photos } = profile
 
-    const params = { type: 'google', email: emails[0].value, firstName: givenName, lastName: familyName, photo: photos[0].value }
-
-    if (await userDB.IsExistsUser({ type: params.type, email: params.email })) {
-        await userDB.SignIn(params)
+        const params = { type: 'google', email: emails[0].value, firstName: givenName, lastName: familyName, photo: photos[0].value }
+    
+        if (await userDB.IsExists({ type: params.type, email: params.email })) await userDB.SignIn(params)
+        else await userDB.SignUp(params)
+    
+        return done(null, profile)
     }
-    else {
-        await userDB.SignUp(params)
+    catch (err) {
+        return done(null, { error: err })
     }
-
-    return done(null, profile)
 })

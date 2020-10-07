@@ -1,10 +1,17 @@
 const { connection } = require('mongoose')
+const { ObjectId } = require('mongodb')
 const userColl = connection.collection('users')
 
-exports.IsExistsUser = async (params = {}) => {
+exports.IsExists = async (params = {}) => {
     const { type, email } = params
 
     return (await userColl.countDocuments({ type, email })) > 0
+}
+
+exports.IsExistsById = async (params = {}) => {
+    const { _id } = params
+
+    return (await userColl.countDocuments({ _id: new ObjectId(_id) }) > 0)
 }
 
 exports.SignUp = (params = {}) => {
