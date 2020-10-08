@@ -12,6 +12,12 @@ router.get('/google/callback', passport.authenticate('google', { failureRedirect
     res.redirect('/auth/sign-in')
 })
 
+router.get('/naver', passport.authenticate('naver'))
+
+router.get('/naver/callback', passport.authenticate('naver', { failureRedirect: '/auth/fail' }), (req, res) => {
+    res.redirect('/auth/sign-in')
+})
+
 router.get('/succeed', (req, res) => {
     try {
         if (!req.user) return res.status(401).send('Unauthorized!')
