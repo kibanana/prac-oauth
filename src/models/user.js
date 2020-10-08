@@ -23,11 +23,13 @@ exports.IsExistsById = async (params = {}) => {
 exports.SignUp = (params = {}) => {
     const { type, email, fullName, firstName, lastName, photo } = params // 이름, 성
 
-    if (fullName) {
-        delete firstName
-        delete lastName
+    const insertQuery = { type, email, photo }
+
+    if (fullName) insertQuery['fullName'] = fullName
+    else if(firstName && lastName) {
+        insertQuery['firstName'] = firstName
+        insertQuery['lastName'] = lastName
     }
-    else delete fullName
 
     const currentDate = new Date().toISOString()
     params['createdAt'] = currentDate
@@ -42,7 +44,7 @@ exports.SignIn = (params = {}) => {
     const updateQuery = { photo, lastLoginDate: new Date().toISOString() }
     
     if (fullName) updateQuery['fullName'] = fullName
-    else {
+    else if(firstName && lastName) {
         updateQuery['firstName'] = firstName
         updateQuery['lastName'] = lastName
     }
