@@ -7,9 +7,10 @@ module.exports = new GoogleStrategy({
     callbackURL: 'http://localhost:3000/auth/google/callback'
 }, async (_accessToken, _refreshToken, profile, done) => {
     try {
-        const { name: { familyName, givenName }, emails, photos } = profile
+        const { provider, _json: profileJson } = profile
+        const { name: fullName, given_name: givenName, family_name: familyName, picture, email } = profileJson
 
-        const params = { type: 'google', email: emails[0].value, firstName: givenName, lastName: familyName, photo: photos[0].value }
+        const params = { type: provider, email: email, fullName, firstName: givenName, lastName: familyName, photo: picture }
     
         if (await userDB.IsExists({ type: params.type, email: params.email })) await userDB.SignIn(params)
         else await userDB.SignUp(params)

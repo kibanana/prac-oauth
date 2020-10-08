@@ -21,16 +21,31 @@ exports.IsExistsById = async (params = {}) => {
 }
 
 exports.SignUp = (params = {}) => {
-    const { type, email, firstName, lastName, photo } = params // 이름, 성
+    const { type, email, fullName, firstName, lastName, photo } = params // 이름, 성
 
-    return userColl.insertOne({ type, email, firstName, lastName, photo, createdAt: new Date().toISOString(), lastLoginDate: new Date().toISOString() })
+    if (fullName) {
+        delete firstName
+        delete lastName
+    }
+    else delete fullName
+
+    const currentDate = new Date().toISOString()
+    params['createdAt'] = currentDate
+    params['lastLoginDate'] = currentDate
+
+    return userColl.insertOne(params)
 }
 
 exports.SignIn = (params = {}) => {
-    const { type, email, firstName, lastName, photo } = params
+    const { type, email, fullName, firstName, lastName, photo } = params
     
-    return userColl.updateOne(
-        { type, email },
-        { $set: { firstName, lastName, photo, lastLoginDate: new Date().toISOString() } }
-    )
+    const updateQuery = { photo, lastLoginDate: new Date().toISOString() }
+    
+    if (fullName) updateQuery['fullName'] = fullName
+    else {
+        updateQuery['firstName'] = firstName
+        updateQuery['lastName'] = lastName
+    }
+
+    return userColl.updateOne({ type, email }, { $set: updateQuery })
 }
