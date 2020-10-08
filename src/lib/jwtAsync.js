@@ -1,10 +1,10 @@
 const jwt = require('jsonwebtoken')
 
-exports.issueAccessToken = (_id) => {
+exports.issueAccessToken = (payload) => {
     return new Promise((resolve, reject) => {
         jwt.sign(
-            { _id },
-            config.JWT_SECRET,
+            payload,
+            process.env.JWT_SECRET,
             { expiresIn: '1h', issuer: process.env.JWT_ISSUER },
             (err, token) => {
                 if (err) reject(err)
@@ -14,11 +14,11 @@ exports.issueAccessToken = (_id) => {
     })
 }
 
-exports.issueRefreshToken = (_id) => {
+exports.issueRefreshToken = (payload) => {
     return new Promise((resolve, reject) => {
         jwt.sign(
-            { _id },
-            config.JWT_REFRESH_SECRET,
+            payload,
+            process.env.JWT_REFRESH_SECRET,
             { expiresIn: '14d', issuer: process.env.JWT_ISSUER },
             (err, token) => {
                 if (err) reject(err)

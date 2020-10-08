@@ -7,8 +7,8 @@ module.exports = new Strategy({
     issuer: process.env.JWT_ISSUER
 }, async (payload, done) => {
     try {
-        if (await userDB.IsExistsById({ _id: payload._id })) done(null, false)
-        else done(null, { _id: payload._id })
+        if (await userDB.IsExistsById({ _id: payload._id })) done(null, { _id: payload._id })
+        else done(null, false)
     }
     catch (err) {
         done(null, { error: err })

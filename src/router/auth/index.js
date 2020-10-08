@@ -1,6 +1,7 @@
 const express = require('express')
 const passport = require('passport')
 const jwt = require('jsonwebtoken')
+const { issueAccessToken, issueRefreshToken } = require('../../lib/jwtAsync')
 const refreshTokenDB = require('../../models/refreshToken')
 
 const router = express.Router()
@@ -32,14 +33,14 @@ router.get('/fail', (req, res) => {
     }
 })
 
-router.get('/sign-in', (req, res) => {
+router.get('/sign-in', async (req, res) => {
     try {
         if (!req.user) return res.status(401).send('Unauthorized!')
 
         const { _id } = req.user
     
-        const token = jwt.sign({ _id }, process.env.JWT_SECRET)
-        const refreshToken = jwt.sign({ _id }, process.env.JWT_REFRESH_SECRET)
+        const token = await issueAccessToken({ _id })
+        const refreshToken = await issueRefreshToken({ _id })
         
         refreshTokenDB.Create({ userId: _id, refreshToken })
     
@@ -61,18 +62,18 @@ router.get('/access-verify', passport.authenticate('jwt', { failureRedirect: '/a
     }
 })
 
-router.get('/refresh-access', (req, res) => {
+router.get('/refresh-access', async (req, res) => {
     try {
-        const { token } = req.query
+        const token = req.headers['authorization'].replace('Bearer ', '')
 
-        if (!token) res.status(400).send('ERR_INVALID_PARAM')
+        if (!token) return res.status(401).send('Unauthorized!')
     
         const decodedToken = jwt.decode(token)
-        if (!decodedToken.hasOwnProperty('_id') || decodedToken._id.length !== 24) res.status(400).send('ERR_INVALID_PARAM')
+        if (!decodedToken.hasOwnProperty('_id') || decodedToken._id.length !== 24) return res.status(400).send('ERR_INVALID_PARAM')
     
         const { _id } = decodedToken
     
-        const newToken = jwt.sign({ _id }, process.env.JWT_SECRET)
+        const newToken = await issueAccessToken({ _id }, process.env.JWT_SECRET)
     
         res.send({ token: newToken })
     }
