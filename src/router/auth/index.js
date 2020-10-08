@@ -18,6 +18,18 @@ router.get('/naver/callback', passport.authenticate('naver', { failureRedirect: 
     res.redirect('/auth/sign-in')
 })
 
+router.get('/kakao', passport.authenticate('kakao'))
+
+router.get('/kakao/callback', passport.authenticate('kakao', { failureRedirect: '/auth/fail' }), (req, res) => {
+    res.redirect('/auth/sign-in')
+})
+
+router.get('/facebook', passport.authenticate('facebook'))
+
+router.get('/facebook/callback', passport.authenticate('facebook', { failureRedirect: '/auth/fail' }), (req, res) => {
+    res.redirect('/auth/sign-in')
+})
+
 router.get('/succeed', (req, res) => {
     try {
         if (!req.user) return res.status(401).send('Unauthorized!')
