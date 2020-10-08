@@ -8,11 +8,10 @@ module.exports = new NaverStrategy({
 }, async (_accessToken, _refreshToken, profile, done) => {
     try {
         const { provider, _json: profileJson } = profile
-
         const { email, nickname, profile_image } = profileJson
+        
+        const params = { type: provider, email: email, fullName: nickname, photo: profile_image }
 
-        const params = { type: provider, email: email, firstName: nickname, lastName: nickname, photo: profile_image }
-    
         if (await userDB.IsExists({ type: params.type, email: params.email })) await userDB.SignIn(params)
         else await userDB.SignUp(params)
 
