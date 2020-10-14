@@ -10,11 +10,12 @@ module.exports = new KakaoStrategy({
         // 회원가입 시 별도 이메일 인증 과정 필요
         // But, 그러면 유효하지 않은 이메일을 카카오 계정에 등록한 회원보다 더 많은 수의 회원이 귀찮지 않을까?
         // Then, 유효하지 않은 이메일인지 확인하는 과정(이메일 인증)을 거치도록 하자.
-        const { provider, username, _json: { kakao_account: { email } } } = profile
-        
-        const params = { type: provider, email: email, fullName: username }
 
-        if (await userDB.IsExists({ type: params.type, email: params.email })) await userDB.SignIn(params)
+        const { id, provider, username, _json: { kakao_account: { email } } } = profile
+        
+        const params = { id, type: provider, email: email, fullName: username }
+
+        if (await userDB.IsExists({ type: params.type, id: params.id })) await userDB.SignIn(params)
         else await userDB.SignUp(params)
 
         const user = await userDB.GetItem({ type: params.type, email: params.email })
