@@ -4,7 +4,7 @@ const userDB = require('../../models/user')
 module.exports = new NaverStrategy({
     clientID: process.env.NAVER_CLIENT_ID,
     clientSecret: process.env.NAVER_CLIENT_SECRET,
-    callbackURL: 'http://localhost:3000/auth/naver/callback'
+    callbackURL: `${process.env.BASE_URL}/auth/naver/callback`
 }, async (_accessToken, _refreshToken, profile, done) => {
     try {
         const { provider, _json: profileJson } = profile

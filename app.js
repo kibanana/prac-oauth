@@ -25,12 +25,14 @@ app.use(cookieParser())
 app.use(passport.initialize())
 app.use(passport.session())
 
-app.use('/', express.static('src/public'))
+app.set('view engine', 'ejs')
+app.use('/', express.static(`${__dirname}/src/public`))
+app.set('views', `${__dirname}/src/views`)
 
 app.use('/auth', router)
 
 app.get('*', (req, res) => {
-    res.redirect('/index.html')
+    res.render('index')
 });
 
 app.listen(3000, () => {

@@ -3,7 +3,7 @@ const userDB = require('../../models/user')
 
 module.exports = new KakaoStrategy({
     clientID: process.env.KAKAO_CLIENT_ID,
-    callbackURL: 'http://localhost:3000/auth/kakao/callback'
+    callbackURL: `${process.env.BASE_URL}/auth/kakao/callback`
 }, async (_accessToken, _refreshToken, profile, done) => {
     try {
         // google, naver처럼 email 정보를 받아와서 그대로 넣으려고 했지만 나같은 경우가 있으면 곤란해지므로 예외적으로 id 사용

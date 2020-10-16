@@ -4,7 +4,7 @@ const userDB = require('../../models/user')
 module.exports = new FacebookStrategy({
     clientID: process.env.FACEBOOK_APP_ID,
     clientSecret: process.env.FACEBOOK_SECRET,
-    callbackURL: 'http://localhost:3000/auth/facebook/callback',
+    callbackURL: `${process.env.BASE_URL}/auth/facebook/callback`,
     profileFields: ['id', 'email', 'gender', 'link', 'locale', 'name', 'timezone',
       'updated_time', 'verified', 'displayName']
   }, async function (_accessToken, _refreshToken, profile, done) {

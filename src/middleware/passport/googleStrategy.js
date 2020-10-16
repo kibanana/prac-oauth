@@ -4,7 +4,7 @@ const userDB = require('../../models/user')
 module.exports = new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: 'http://localhost:3000/auth/google/callback'
+    callbackURL: `${process.env.BASE_URL}/auth/google/callback`
 }, async (_accessToken, _refreshToken, profile, done) => {
     try {
         const { provider, _json: profileJson } = profile
