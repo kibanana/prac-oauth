@@ -20,6 +20,7 @@
   },
   "devDependencies": {},
   "scripts": {
+    "prestart": "npm i",
     "start": "node app",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
