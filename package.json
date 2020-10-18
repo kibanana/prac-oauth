@@ -22,7 +22,7 @@
   "devDependencies": {},
   "scripts": {
     "prestart": "npm i",
-    "start": "node app",
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
